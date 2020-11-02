@@ -94,5 +94,10 @@ public interface ISCM {
 	 * Terminates the analysis and free resources.
 	 */
 	public void close();
+	
+	/**
+	 * Get project source path 
+	 */
+	public String getSourcePath();
 
 }

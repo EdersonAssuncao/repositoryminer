@@ -1,6 +1,7 @@
 package org.repositoryminer.plugin;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -45,7 +46,8 @@ public abstract class SnapshotAnalysisPlugin<T> {
 		scm = SCMFactory.getSCM(SCMType.valueOf(repoDoc.getString("scm")));
 		repositoryId = repoDoc.getObjectId("_id");
 		tmpRepository = RMFileUtils.copyFolderToTmp(repoDoc.getString("path"),
-				StringUtils.encodeToSHA1(repositoryId.toHexString()));
+				// para o sistema conseguir abrir mais de um repositório ao utilizar Threads no projeto coocorrência.
+				StringUtils.encodeToSHA1(repositoryId.toHexString()+ new Random().nextInt(10000)));
 
 		scm.open(tmpRepository);
 	}

@@ -103,8 +103,14 @@ public class AnalysisRunner {
 				codeSmell.detect(fr, projectReport);
 			}
 		}
+		
+		// sem necessidade para o projeto coocorrencia
+		//persistData(analysisReportId, commit, repoId, reference);
+	}
 
-		persistData(analysisReportId, commit, repoId, reference);
+	// obter o relatório para o projeto coocorrencia
+	public ProjectReport getProjectReport() {
+		return projectReport;
 	}
 
 	private void analyzeFile(File file, String repository) throws IOException {

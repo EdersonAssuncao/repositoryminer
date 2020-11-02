@@ -12,6 +12,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -239,12 +240,16 @@ public class GitSCM implements ISCM {
 		} catch (GitAPIException e) {
 			close();
 			throw new RepositoryMinerException(e);
+		} catch (JGitInternalException e) {
+			LOG.info("Error:");
+			close();
 		}
 	}
 
 	@Override
 	public void close() {
-		LOG.info("Repository being closed.");
+		// Add informação do diretório raiz do código fontes do projeto em análise.
+		LOG.info("Repository being closed: " + git.getRepository().getDirectory().getParent());
 		git.getRepository().close();
 		git.close();
 	}
@@ -363,6 +368,12 @@ public class GitSCM implements ISCM {
 			close();
 			throw new RepositoryMinerException(e);
 		}
+	}
+
+	
+	@Override
+	public String getSourcePath() {
+		return git.getRepository().getDirectory().getParent();
 	}
 
 }
